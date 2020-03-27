@@ -21,13 +21,19 @@ public class UploadQuery {
     private final String brandId;
     /**
      * Media id. If specified it will add the media asset file as new version of the specified
-     * media. Otherwise a new media asset will be added to the asset bank.
+     * media. Or as new additional file of specified media if {@code isAdditionalFile} is {@code true}.
+     * If is not specified, a new media asset will be added to the asset bank.
      */
     private String mediaId;
     /**
      * Flags if the media asset should be sent to the waiting room.
      */
     private Boolean audit;
+
+    /**
+     * Whether the new asset should be added as new additional file (if {@code mediaId} is not null).
+     */
+    private Boolean isAdditionalFile;
 
     public UploadQuery(final String filepath, final String brandId) {
         this.filepath = filepath;
@@ -57,6 +63,15 @@ public class UploadQuery {
 
     public UploadQuery setAudit(final Boolean audit) {
         this.audit = audit;
+        return this;
+    }
+
+    public Boolean isAdditionalFile() {
+        return isAdditionalFile;
+    }
+
+    public UploadQuery setAdditionalFile(Boolean additionalAsset) {
+        isAdditionalFile = additionalAsset;
         return this;
     }
 }

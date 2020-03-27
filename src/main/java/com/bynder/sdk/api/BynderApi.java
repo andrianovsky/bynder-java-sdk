@@ -312,6 +312,13 @@ public interface BynderApi {
     @POST("/api/v4/upload/")
     Observable<Response<FinaliseResponse>> finaliseUpload(@FieldMap Map<String, String> params);
 
+
+
+    @FormUrlEncoded
+    @POST("/api/v4/media/{id}/save/additional/{uploadId}/")
+    Observable<Response<FinaliseResponse>> finaliseAdditionalFileUpload(@Path("id") String id,
+        @Path("uploadId") String uploadId, @FieldMap Map<String, String> params);
+
     /**
      * Gets poll processing status of finalised files.
      *

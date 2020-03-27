@@ -10,7 +10,7 @@ import com.bynder.sdk.api.BynderApi;
 import java.util.Map;
 
 /**
- * Model returned by {@link BynderApi#finaliseUpload(Map)}.
+ * Model returned by {@link BynderApi#finaliseUpload(Map)} or {@link BynderApi#finaliseAdditionalFileUpload}.
  */
 public class FinaliseResponse {
 
@@ -19,7 +19,16 @@ public class FinaliseResponse {
      */
     private String importId;
 
+    /**
+     * Item id returned by {@link BynderApi#finaliseAdditionalFileUpload}. Needed to poll and save media.
+     */
+    private String itemId;
+
     public String getImportId() {
         return importId;
+    }
+
+    public String getItemId() {
+        return itemId;
     }
 }

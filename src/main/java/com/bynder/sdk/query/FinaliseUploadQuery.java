@@ -36,12 +36,24 @@ public class FinaliseUploadQuery {
     @ApiField(name = "chunks")
     private final int chunks;
 
+    /**
+     * Indicates that the asset should be uploaded as an additional file to existing asset
+     */
+    private final boolean isAdditionalFile;
+
+    /**
+     * Asset it to which to save new additional file. Makes sense only if {@code isAdditionalFile} is {@code true}.
+     */
+    private final String mediaId;
+
     public FinaliseUploadQuery(final String uploadId, final String targetId,
-        final String s3Filename, final int chunks) {
+                               final String s3Filename, final int chunks, final boolean additionalAsset, String mediaId) {
         this.uploadId = uploadId;
         this.targetId = targetId;
         this.s3Filename = s3Filename;
         this.chunks = chunks;
+        this.isAdditionalFile = additionalAsset;
+        this.mediaId = mediaId;
     }
 
     public String getUploadId() {
@@ -58,5 +70,13 @@ public class FinaliseUploadQuery {
 
     public int getChunks() {
         return chunks;
+    }
+
+    public boolean isAdditionalFile() {
+        return isAdditionalFile;
+    }
+
+    public String getMediaId() {
+        return mediaId;
     }
 }

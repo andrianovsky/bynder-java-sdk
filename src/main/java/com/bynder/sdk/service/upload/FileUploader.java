@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
+
 import retrofit2.Response;
 
 /**
@@ -126,10 +128,13 @@ public class FileUploader {
                                     new FinaliseUploadQuery(uploadRequest.getS3File().getUploadId(),
                                         uploadRequest.getS3File().getTargetId(),
                                         uploadRequest.getS3Filename(),
-                                        uploadProgress.getUploadedChunks()));
+                                        uploadProgress.getUploadedChunks(),
+                                        uploadQuery.isAdditionalFile(),
+                                        uploadQuery.getMediaId()));
 
                                 finaliseUploadObs.subscribe(finaliseResponse -> {
-                                    String importId = finaliseResponse.body().getImportId();
+                                    String importId = Optional.ofNullable(finaliseResponse.body().getImportId())
+                                        .orElse(finaliseResponse.body().getItemId());
                                     checkUploadFinished(importId)
                                         .subscribe(hasFinishedSuccessfully -> {
                                             if (hasFinishedSuccessfully) {
@@ -348,7 +353,11 @@ public class FileUploader {
     private Observable<Response<FinaliseResponse>> finaliseUpload(
         final FinaliseUploadQuery finaliseUploadQuery) throws IllegalAccessException {
         Map<String, String> params = Utils.getApiParameters(finaliseUploadQuery);
-        return bynderApi.finaliseUpload(params);
+        if (finaliseUploadQuery.isAdditionalFile()) {
+            return bynderApi.finaliseAdditionalFileUpload(finaliseUploadQuery.getMediaId(), finaliseUploadQuery.getUploadId(), params);
+        } else {
+            return bynderApi.finaliseUpload(params);
+        }
     }
 
     /**
